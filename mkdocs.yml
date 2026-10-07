@@ -1,0 +1,118 @@
+site_name: IBM Concert Workshop
+site_description: Workshop técnico interactivo de IBM Concert — Plataforma Agentic de ITOps
+site_author: IBM Client Engineering
+docs_dir: docs
+
+theme:
+  name: material
+  icon:
+    logo: material/school
+  favicon: assets/images/ibm-logo.png
+  language: es
+  palette:
+    - scheme: default
+      primary: custom
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      primary: custom
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Cambiar a modo claro
+  features:
+    - navigation.tracking
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - content.code.copy
+    - content.tabs.link
+    - search.highlight
+    - search.share
+
+plugins:
+  - search:
+      lang:
+        - es
+        - en
+  - glightbox
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: es
+          default: true
+          name: Español
+          build: true
+        - locale: en
+          name: English
+          build: true
+          nav_translations:
+            Inicio: Home
+            "Lab 0 - Prerequisitos": "Lab 0 - Prerequisites"
+            "Lab 1 - Introducción a Concert": "Lab 1 - Introduction to Concert"
+            "Lab 2 - Concert Protect: Vulnerabilidades": "Lab 2 - Concert Protect: Vulnerabilities"
+            "Lab 3 - Concert Observe: Observabilidad": "Lab 3 - Concert Observe: Observability"
+            "Lab 4 - Concert Resilience: Gestión de Incidentes": "Lab 4 - Concert Resilience: Incident Management"
+            "Lab 5 - Concert Optimize: Recursos": "Lab 5 - Concert Optimize: Resources"
+            "Lab 6 - Concert Workflows: Automatización": "Lab 6 - Concert Workflows: Automation"
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      title: En esta página
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Inicio: index.md
+  - "Lab 0 - Prerequisitos": lab0/index.md
+  - "Lab 1 - Introducción a Concert": lab1/index.md
+  - "Lab 2 - Concert Protect: Vulnerabilidades": lab2/index.md
+  - "Lab 3 - Concert Observe: Observabilidad": lab3/index.md
+  - "Lab 4 - Concert Resilience: Gestión de Incidentes": lab4/index.md
+  - "Lab 5 - Concert Optimize: Recursos": lab5/index.md
+  - "Lab 6 - Concert Workflows: Automatización": lab6/index.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ibm
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/ibm
+  generator: false
+
+extra_css:
+  - styles/custom.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+copyright: Copyright &copy; 2026 IBM Corporation

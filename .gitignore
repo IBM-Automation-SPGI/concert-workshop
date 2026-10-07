@@ -1,0 +1,32 @@
+# MkDocs build output
+site/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+env/
+.env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# macOS
+.DS_Store
+.AppleDouble
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

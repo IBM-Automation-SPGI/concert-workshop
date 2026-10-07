@@ -1,0 +1,1617 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop técnico interactivo de IBM Concert — Plataforma Agentic de ITOps">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+      
+        <link rel="prev" href="../lab3/">
+      
+      
+        <link rel="next" href="../lab5/">
+      
+      
+        
+          <link rel="alternate" href="../../lab4/" hreflang="es">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/ibm-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 4 - Concert Resilience: Incident Management - IBM Concert Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../styles/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-4-concert-resilience-incident-management-and-response" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../" title="IBM Concert Workshop" class="md-header__button md-logo" aria-label="IBM Concert Workshop" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"></path></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IBM Concert Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 4 - Concert Resilience: Incident Management
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue" aria-label="Cambiar a modo oscuro" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue" aria-label="Cambiar a modo claro" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"></path></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../lab4/" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard="" data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="IBM Concert Workshop" class="md-nav__button md-logo" aria-label="IBM Concert Workshop" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"></path></svg>
+
+    </a>
+    IBM Concert Workshop
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 - Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 - Introduction to Concert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 - Concert Protect: Vulnerabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 - Concert Observe: Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 - Concert Resilience: Incident Management
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 - Concert Resilience: Incident Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#lab-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lab Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-to-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction to Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-concert-resilience-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Concert Resilience Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Concert Resilience Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-accessing-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Accessing Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-resilience-control-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Resilience Control Panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-incident-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Incident Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Incident Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-incident-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Incident List
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-incident-severities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Incident Severities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-creating-an-incident-manually" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Creating an Incident Manually
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-incident-detail-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Incident Detail View
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Runbooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Runbooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-what-are-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 What are Runbooks?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-exploring-available-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Exploring Available Runbooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-executing-a-runbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Executing a Runbook
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-change-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Change Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Change Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-change-management-in-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Change Management in Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-change-to-incident-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Change-to-Incident Correlation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-concert-ai-for-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Concert AI for Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Concert AI for Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-the-ai-assistant-in-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 The AI Assistant in Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-queries-to-the-ai-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Queries to the AI Assistant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-practical-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Practical Exercise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Practical Exercise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exercise-manage-a-simulated-incident" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Exercise: Manage a Simulated Incident
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 - Concert Optimize: Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 - Concert Workflows: Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#lab-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lab Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-to-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction to Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-concert-resilience-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Concert Resilience Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Concert Resilience Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-accessing-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Accessing Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-resilience-control-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Resilience Control Panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-incident-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Incident Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Incident Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-incident-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Incident List
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-incident-severities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Incident Severities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-creating-an-incident-manually" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Creating an Incident Manually
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-incident-detail-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Incident Detail View
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Runbooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Runbooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-what-are-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 What are Runbooks?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-exploring-available-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Exploring Available Runbooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-executing-a-runbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Executing a Runbook
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-change-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Change Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Change Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-change-management-in-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Change Management in Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-change-to-incident-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Change-to-Incident Correlation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-concert-ai-for-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Concert AI for Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Concert AI for Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-the-ai-assistant-in-concert-resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 The AI Assistant in Concert Resilience
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-queries-to-the-ai-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Queries to the AI Assistant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-practical-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Practical Exercise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Practical Exercise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exercise-manage-a-simulated-incident" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Exercise: Manage a Simulated Incident
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lab-4-concert-resilience-incident-management-and-response">Lab 4 — Concert Resilience: Incident Management and Response<a class="headerlink" href="#lab-4-concert-resilience-incident-management-and-response" title="Permanent link">¶</a></h1>
+<div class="lab-badge lab-badge-blue">Lab 4</div>
+<div class="lab-badge lab-badge-teal">Concert Resilience</div>
+<div class="lab-badge lab-badge-green">20 min</div>
+
+<hr>
+<h2 id="lab-objectives">Lab Objectives<a class="headerlink" href="#lab-objectives" title="Permanent link">¶</a></h2>
+<p>By the end of this lab you will be able to:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Navigate the <strong>Concert Resilience</strong> module</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Create and manage <strong>IT incidents</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Execute <strong>automated Runbooks</strong> for remediation</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Manage the <strong>Change Management</strong> process</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Use <strong>Concert AI</strong> to accelerate resolution</li>
+</ul>
+<hr>
+<h2 id="introduction-to-concert-resilience">Introduction to Concert Resilience<a class="headerlink" href="#introduction-to-concert-resilience" title="Permanent link">¶</a></h2>
+<div class="concert-operate">
+
+**Concert Resilience** transforms incident response from a reactive, manual process into an AI-guided, coordinated system. It integrates alerts, context, runbooks and tools into a single orchestrated workflow.
+
+</div>
+
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; Detected: Alert detected
+    Detected --&gt; Triaged: Concert AI triages
+    Triaged --&gt; InProgress: Incident created
+    InProgress --&gt; Investigating: RCA in progress
+    Investigating --&gt; Remediating: Runbook executed
+    Remediating --&gt; Resolved: Service restored
+    Resolved --&gt; PostMortem: Post-incident review
+    PostMortem --&gt; [*]: Lesson learned
+
+    note right of Triaged
+        Concert AI:
+        - Correlates signals
+        - Suggests severity
+        - Proposes runbook
+    end note</code></pre>
+<hr>
+<h2 id="1-concert-resilience-overview">1. Concert Resilience Overview<a class="headerlink" href="#1-concert-resilience-overview" title="Permanent link">¶</a></h2>
+<h3 id="11-accessing-concert-resilience">1.1 Accessing Concert Resilience<a class="headerlink" href="#11-accessing-concert-resilience" title="Permanent link">¶</a></h3>
+<p>In the <strong>top navigation bar</strong>, click on <strong>"Resilience"</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-resilience-overview.png" data-desc-position="bottom"><img alt="Concert Resilience main view" src="../../assets/images/lab4-resilience-overview.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 1 — Concert Resilience main dashboard with active incidents and service health status</p>
+</div>
+</div>
+<h3 id="12-resilience-control-panel">1.2 Resilience Control Panel<a class="headerlink" href="#12-resilience-control-panel" title="Permanent link">¶</a></h3>
+<p>The Resilience dashboard shows:</p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Active Incidents</strong></td>
+<td>Ongoing incidents classified by severity</td>
+</tr>
+<tr>
+<td><strong>MTTR Trending</strong></td>
+<td>Mean Time To Resolution trend</td>
+</tr>
+<tr>
+<td><strong>On-Call Schedule</strong></td>
+<td>Currently on-call teams</td>
+</tr>
+<tr>
+<td><strong>Recent Changes</strong></td>
+<td>Latest deployed changes</td>
+</tr>
+<tr>
+<td><strong>Service Health Map</strong></td>
+<td>Real-time status of all services</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-incident-management">2. Incident Management<a class="headerlink" href="#2-incident-management" title="Permanent link">¶</a></h2>
+<h3 id="21-incident-list">2.1 Incident List<a class="headerlink" href="#21-incident-list" title="Permanent link">¶</a></h3>
+<p>Navigate to <strong>Resilience → Incidents</strong> to see all incidents.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-incidents-list.png" data-desc-position="bottom"><img alt="Incident list in Concert Resilience" src="../../assets/images/lab4-incidents-list.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 2 — Active incident list with severity, affected service and response time</p>
+</div>
+</div>
+<h3 id="22-incident-severities">2.2 Incident Severities<a class="headerlink" href="#22-incident-severities" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Description</th>
+<th>MTTR target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 <strong>SEV1</strong></td>
+<td>Total service outage</td>
+<td>&lt; 1 hour</td>
+</tr>
+<tr>
+<td>🟠 <strong>SEV2</strong></td>
+<td>Significant degradation</td>
+<td>&lt; 4 hours</td>
+</tr>
+<tr>
+<td>🟡 <strong>SEV3</strong></td>
+<td>Partial or limited impact</td>
+<td>&lt; 24 hours</td>
+</tr>
+<tr>
+<td>🔵 <strong>SEV4</strong></td>
+<td>Minor or cosmetic issue</td>
+<td>&lt; 1 week</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-creating-an-incident-manually">2.3 Creating an Incident Manually<a class="headerlink" href="#23-creating-an-incident-manually" title="Permanent link">¶</a></h3>
+<p>To create an incident:</p>
+<ol>
+<li>Click <strong>"+ New Incident"</strong> or <strong>"Create Incident"</strong></li>
+<li>Fill in the form:</li>
+</ol>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-create-incident.png" data-desc-position="bottom"><img alt="Create incident in Concert" src="../../assets/images/lab4-create-incident.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 3 — Incident creation form with severity, service and description fields</p>
+</div>
+</div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">Title</span><span class="p">:</span><span class="w"> </span><span class="s">"Payment</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">High</span><span class="nv"> </span><span class="s">latency</span><span class="nv"> </span><span class="s">detected"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">Severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SEV2</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">Affected service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">payment-service</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">Environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Production</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="no">The payment service is responding with latencies exceeding </span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="no">8 seconds (P99). Frontend timeout errors are being observed.</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nt">Assigned to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">On-call Team</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nt">Tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">payment, latency, production</span>
+</span></code></pre></div>
+<ol>
+<li>Click <strong>"Create"</strong></li>
+</ol>
+<h3 id="24-incident-detail-view">2.4 Incident Detail View<a class="headerlink" href="#24-incident-detail-view" title="Permanent link">¶</a></h3>
+<p>When you open an incident, you will see the full management panel:</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-incident-detail.png" data-desc-position="bottom"><img alt="Incident detail in Concert" src="../../assets/images/lab4-incident-detail.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 4 — Incident detail view with timeline, correlated signals and suggested runbooks</p>
+</div>
+</div>
+<p><strong>The detail view includes:</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><input id="__tabbed_1_4" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Timeline</label><label for="__tabbed_1_2">Correlated Signals</label><label for="__tabbed_1_3">AI Recommendations</label><label for="__tabbed_1_4">Runbooks</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Chronological incident history:</p>
+<ul>
+<li>When the first signal was detected</li>
+<li>When the incident was created</li>
+<li>Actions taken by the team</li>
+<li>Status changes</li>
+<li>Resolution</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Correlated signals from Concert Observe:</p>
+<ul>
+<li>Related metric alerts</li>
+<li>Error traces in the period</li>
+<li>Relevant system logs</li>
+<li>Infrastructure events</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Concert AI suggestions:</p>
+<ul>
+<li>Most likely root cause analysis</li>
+<li>Suggested runbooks for remediation</li>
+<li>Similar historical incidents</li>
+<li>Estimated business impact</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Available remediation procedures:</p>
+<ul>
+<li>Manual runbooks (step-by-step)</li>
+<li>Automated runbooks (execute directly)</li>
+<li>Escalation playbooks</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-incident-tabs.png" data-desc-position="bottom"><img alt="Incident tabs" src="../../assets/images/lab4-incident-tabs.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 5 — Incident tabs: Timeline, Correlated Signals, AI Recommendations and Runbooks</p>
+</div>
+</div>
+<hr>
+<h2 id="3-runbooks">3. Runbooks<a class="headerlink" href="#3-runbooks" title="Permanent link">¶</a></h2>
+<h3 id="31-what-are-runbooks">3.1 What are Runbooks?<a class="headerlink" href="#31-what-are-runbooks" title="Permanent link">¶</a></h3>
+<p><strong>Runbooks</strong> are documented and automated procedures to respond to incidents. Concert allows:</p>
+<ul>
+<li>📖 <strong>Manual runbooks</strong>: Step-by-step instructions for the team</li>
+<li>⚡ <strong>Automated runbooks</strong>: Execute actions directly in systems</li>
+</ul>
+<h3 id="32-exploring-available-runbooks">3.2 Exploring Available Runbooks<a class="headerlink" href="#32-exploring-available-runbooks" title="Permanent link">¶</a></h3>
+<p>Navigate to <strong>Resilience → Runbooks</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-runbooks.png" data-desc-position="bottom"><img alt="Runbook library in Concert" src="../../assets/images/lab4-runbooks.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 6 — Runbook library with categories and automation status</p>
+</div>
+</div>
+<h3 id="33-executing-a-runbook">3.3 Executing a Runbook<a class="headerlink" href="#33-executing-a-runbook" title="Permanent link">¶</a></h3>
+<ol>
+<li>In the incident view, go to the <strong>"Runbooks"</strong> tab</li>
+<li>Select the runbook suggested by Concert AI</li>
+<li>Click <strong>"Run"</strong> or <strong>"Execute"</strong></li>
+<li>Review the steps that will be executed</li>
+<li>Confirm execution</li>
+</ol>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-runbook-execute.png" data-desc-position="bottom"><img alt="Automated Runbook execution" src="../../assets/images/lab4-runbook-execute.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 7 — Automated Runbook execution with real-time log of actions</p>
+</div>
+</div>
+<hr>
+<h2 id="4-change-management">4. Change Management<a class="headerlink" href="#4-change-management" title="Permanent link">¶</a></h2>
+<h3 id="41-change-management-in-concert-resilience">4.1 Change Management in Concert Resilience<a class="headerlink" href="#41-change-management-in-concert-resilience" title="Permanent link">¶</a></h3>
+<p>Concert Resilience includes change management that automatically correlates:</p>
+<ul>
+<li>Recent deployments and releases</li>
+<li>Configuration changes</li>
+<li>Infrastructure activity</li>
+<li>With incidents and alerts in the same period</li>
+</ul>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-change-management.png" data-desc-position="bottom"><img alt="Change Management in Concert" src="../../assets/images/lab4-change-management.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 8 — Change Management view showing recent changes and their impact on services</p>
+</div>
+</div>
+<h3 id="42-change-to-incident-correlation">4.2 Change-to-Incident Correlation<a class="headerlink" href="#42-change-to-incident-correlation" title="Permanent link">¶</a></h3>
+<p>Concert Resilience automatically correlates changes with incidents:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>📅 Event Timeline:
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>22:00 UTC — Deploy: payment-service v2.3.1
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>22:15 UTC — ⚠️ Alert: Latency increase in payment-service
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>22:17 UTC — 🔴 Incident created: SEV2
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>22:18 UTC — 🧠 Concert AI: "Related change detected (2 min prior)"
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>22:20 UTC — 🔄 Action: Rollback initiated
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>22:35 UTC — ✅ Incident resolved: Rollback successful
+</span></code></pre></div>
+<hr>
+<h2 id="5-concert-ai-for-operations">5. Concert AI for Operations<a class="headerlink" href="#5-concert-ai-for-operations" title="Permanent link">¶</a></h2>
+<h3 id="51-the-ai-assistant-in-concert-resilience">5.1 The AI Assistant in Concert Resilience<a class="headerlink" href="#51-the-ai-assistant-in-concert-resilience" title="Permanent link">¶</a></h3>
+<p>Concert includes a conversational AI assistant to help during incidents. Access it from the chat icon in the top bar.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-ai-assistant.png" data-desc-position="bottom"><img alt="Concert AI Assistant in Resilience" src="../../assets/images/lab4-ai-assistant.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 9 — Concert AI assistant answering questions about the active incident</p>
+</div>
+</div>
+<h3 id="52-queries-to-the-ai-assistant">5.2 Queries to the AI Assistant<a class="headerlink" href="#52-queries-to-the-ai-assistant" title="Permanent link">¶</a></h3>
+<p>You can ask the assistant questions in natural language:</p>
+<div class="admonition example">
+<p class="admonition-title">Example AI queries</p>
+<p><strong>"Which services are affected by the current incident?"</strong></p>
+<p>→ Concert AI: "Incident INC-1234 affects 3 services: payment-service (root cause), 
+frontend (timeout symptom) and order-service (queued requests). 
+The most likely cause based on trace analysis is an unindexed SQL query 
+introduced in commit f8a3bc2 in the 22:00 UTC deployment."</p>
+<p><strong>"Which runbook should I run?"</strong></p>
+<p>→ Concert AI: "I recommend running 'Database Query Optimization' as trace analysis 
+shows 8-12 second queries on the transactions table. 
+Alternatively, you can immediately rollback the latest deploy with the 
+'Emergency Rollback' runbook."</p>
+</div>
+<hr>
+<h2 id="6-practical-exercise">6. Practical Exercise<a class="headerlink" href="#6-practical-exercise" title="Permanent link">¶</a></h2>
+<h3 id="exercise-manage-a-simulated-incident">🎯 Exercise: Manage a Simulated Incident<a class="headerlink" href="#exercise-manage-a-simulated-incident" title="Permanent link">¶</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Scenario</label><label for="__tabbed_2_2">Steps</label><label for="__tabbed_2_3">Questions</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>The RobotShop payment service is experiencing high latency.
+Users report that transactions take more than 10 seconds.</p>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>Navigate to <strong>Resilience → Incidents</strong></li>
+<li>Observe the active incidents</li>
+<li>Click on the highest severity incident</li>
+<li>Review the incident's <strong>Correlated Signals</strong></li>
+<li>Check the <strong>AI Recommendations</strong></li>
+<li>Identify the <strong>suggested Runbook</strong></li>
+<li>Review (without executing) the Runbook steps</li>
+<li>Check the incident <strong>Timeline</strong></li>
+</ol>
+</div>
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Your Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How many active incidents are there?</td>
+<td></td>
+</tr>
+<tr>
+<td>Which one has the highest severity?</td>
+<td></td>
+</tr>
+<tr>
+<td>Which service is affected?</td>
+<td></td>
+</tr>
+<tr>
+<td>Which runbook does Concert AI suggest?</td>
+<td></td>
+</tr>
+<tr>
+<td>What is the team's average MTTR?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../assets/images/lab4-exercise.png" data-desc-position="bottom"><img alt="Incident management exercise" src="../../assets/images/lab4-exercise.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figure 10 — Resilience module during the incident management exercise</p>
+</div>
+</div>
+<hr>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">¶</a></h2>
+<div class="admonition success">
+<p class="admonition-title">Lab 4 completed ✅</p>
+<p>You have successfully explored the Concert Resilience module:</p>
+<ul>
+<li>✅ Resilience dashboard with active incidents</li>
+<li>✅ Creating and managing incident lifecycle</li>
+<li>✅ Library of manual and automated Runbooks</li>
+<li>✅ Change management and incident correlation</li>
+<li>✅ AI assistant for guided resolution</li>
+</ul>
+<p><strong>Next step</strong>: <a href="../lab5/">Lab 5 — Concert Optimize: Resources →</a></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2026 IBM Corporation
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ibm" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/ibm" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "content.tabs.link", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

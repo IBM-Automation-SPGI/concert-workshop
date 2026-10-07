@@ -1,0 +1,1884 @@
+<!DOCTYPE html><html lang="es" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop técnico interactivo de IBM Concert — Plataforma Agentic de ITOps">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+      
+        <link rel="prev" href="../lab2/">
+      
+      
+        <link rel="next" href="../lab4/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+          <link rel="alternate" href="../en/lab3/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../assets/images/ibm-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 3 - Concert Observe: Observabilidad - IBM Concert Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../styles/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-3-concert-observe-observabilidad-full-stack" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="IBM Concert Workshop" class="md-header__button md-logo" aria-label="IBM Concert Workshop" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"></path></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IBM Concert Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 3 - Concert Observe: Observabilidad
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue" aria-label="Cambiar a modo oscuro" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue" aria-label="Cambiar a modo claro" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"></path></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../en/lab3/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartir" aria-label="Compartir" data-clipboard="" data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="IBM Concert Workshop" class="md-nav__button md-logo" aria-label="IBM Concert Workshop" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"></path></svg>
+
+    </a>
+    IBM Concert Workshop
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 - Prerequisitos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 - Introducción a Concert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 - Concert Protect: Vulnerabilidades
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 - Concert Observe: Observabilidad
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 - Concert Observe: Observabilidad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-del-laboratorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos del laboratorio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion-a-concert-observe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción a Concert Observe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-vista-general-de-concert-observe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Vista General de Concert Observe
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Vista General de Concert Observe">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-acceder-a-concert-observe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Acceder a Concert Observe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-metricas-principales-del-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Métricas Principales del Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-application-performance-monitoring-apm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Application Performance Monitoring (APM)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Application Performance Monitoring (APM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-vista-de-aplicaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Vista de Aplicaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-explorar-una-aplicacion-robotshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Explorar una Aplicación — RobotShop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-mapa-de-dependencias-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Mapa de Dependencias (Topology)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Mapa de Dependencias (Topology)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-acceder-al-topology-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Acceder al Topology Map
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-interpretar-el-mapa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Interpretar el Mapa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-analisis-de-dependencias-de-robotshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Análisis de Dependencias de RobotShop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-trazas-distribuidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Trazas Distribuidas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Trazas Distribuidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-acceder-a-distributed-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Acceder a Distributed Tracing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-filtros-de-trazas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Filtros de Trazas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-analizar-una-traza" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Analizar una Traza
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-observabilidad-de-infraestructura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Observabilidad de Infraestructura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Observabilidad de Infraestructura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-acceder-a-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Acceder a Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-vista-de-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Vista de Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-metricas-de-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Métricas de Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-alertas-y-smart-alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Alertas y Smart Alerts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Alertas y Smart Alerts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-sistema-de-alertas-de-concert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Sistema de Alertas de Concert
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-tipos-de-alertas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Tipos de Alertas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-configurar-una-alerta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Configurar una Alerta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-root-cause-analysis-rca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Root Cause Analysis (RCA)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Root Cause Analysis (RCA)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-como-funciona-el-rca-en-concert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 ¿Cómo funciona el RCA en Concert?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-ejercicio-investigar-un-problema-de-rendimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Ejercicio: Investigar un Problema de Rendimiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-integracion-con-concert-protect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Integración con Concert Protect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 - Concert Resilience: Gestión de Incidentes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 - Concert Optimize: Recursos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 - Concert Workflows: Automatización
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-del-laboratorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos del laboratorio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion-a-concert-observe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción a Concert Observe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-vista-general-de-concert-observe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Vista General de Concert Observe
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Vista General de Concert Observe">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-acceder-a-concert-observe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Acceder a Concert Observe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-metricas-principales-del-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Métricas Principales del Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-application-performance-monitoring-apm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Application Performance Monitoring (APM)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Application Performance Monitoring (APM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-vista-de-aplicaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Vista de Aplicaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-explorar-una-aplicacion-robotshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Explorar una Aplicación — RobotShop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-mapa-de-dependencias-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Mapa de Dependencias (Topology)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Mapa de Dependencias (Topology)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-acceder-al-topology-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Acceder al Topology Map
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-interpretar-el-mapa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Interpretar el Mapa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-analisis-de-dependencias-de-robotshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Análisis de Dependencias de RobotShop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-trazas-distribuidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Trazas Distribuidas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Trazas Distribuidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-acceder-a-distributed-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Acceder a Distributed Tracing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-filtros-de-trazas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Filtros de Trazas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-analizar-una-traza" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Analizar una Traza
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-observabilidad-de-infraestructura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Observabilidad de Infraestructura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Observabilidad de Infraestructura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-acceder-a-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Acceder a Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-vista-de-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Vista de Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-metricas-de-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Métricas de Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-alertas-y-smart-alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Alertas y Smart Alerts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Alertas y Smart Alerts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-sistema-de-alertas-de-concert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Sistema de Alertas de Concert
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-tipos-de-alertas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Tipos de Alertas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-configurar-una-alerta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Configurar una Alerta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-root-cause-analysis-rca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Root Cause Analysis (RCA)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Root Cause Analysis (RCA)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-como-funciona-el-rca-en-concert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 ¿Cómo funciona el RCA en Concert?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-ejercicio-investigar-un-problema-de-rendimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Ejercicio: Investigar un Problema de Rendimiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-integracion-con-concert-protect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Integración con Concert Protect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lab-3-concert-observe-observabilidad-full-stack">Lab 3 — Concert Observe: Observabilidad Full-Stack<a class="headerlink" href="#lab-3-concert-observe-observabilidad-full-stack" title="Permanent link">¶</a></h1>
+<div class="lab-badge lab-badge-teal">Lab 3</div>
+<div class="lab-badge lab-badge-blue">Concert Observe</div>
+<div class="lab-badge lab-badge-green">20 min</div>
+
+<hr>
+<h2 id="objetivos-del-laboratorio">Objetivos del laboratorio<a class="headerlink" href="#objetivos-del-laboratorio" title="Permanent link">¶</a></h2>
+<p>Al finalizar este laboratorio serás capaz de:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Navegar por el módulo <strong>Concert Observe</strong> (basado en Instana)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Explorar el <strong>Application Performance Monitoring (APM)</strong> full-stack</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Analizar el <strong>mapa de dependencias</strong> en tiempo real</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Consultar <strong>trazas distribuidas</strong> entre microservicios</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Configurar y revisar <strong>alertas y umbrales</strong> de rendimiento</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Explorar la <strong>observabilidad de infraestructura</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Identificar la causa raíz de un problema de rendimiento</li>
+</ul>
+<hr>
+<h2 id="introduccion-a-concert-observe">Introducción a Concert Observe<a class="headerlink" href="#introduccion-a-concert-observe" title="Permanent link">¶</a></h2>
+<div class="concert-observe">
+
+**Concert Observe** integra observabilidad de aplicaciones, infraestructura y red en una vista operacional unificada. Correlacionando telemetría entre dominios y mapeando dependencias en entornos híbridos, los equipos pueden entender el comportamiento del sistema, identificar la causa raíz de problemas y evaluar el impacto en negocio.
+
+</div>
+
+<pre class="mermaid"><code>graph TB
+    subgraph SOURCES["📡 Fuentes de Telemetría"]
+        APM["APM Traces&lt;br/&gt;(Instana Agent)"]
+        METRICS["Infrastructure&lt;br/&gt;Metrics"]
+        LOGS["Logs&lt;br/&gt;(OpenTelemetry)"]
+        NET["Network&lt;br/&gt;Flow Data"]
+        SYNTH["Synthetic&lt;br/&gt;Monitors"]
+    end
+
+    subgraph OBSERVE["🔭 Concert Observe"]
+        COLLECT["Colección &amp;&lt;br/&gt;Correlación"]
+        ANALYZE["Análisis &amp;&lt;br/&gt;AI Insights"]
+        ALERT["Alertas &amp;&lt;br/&gt;Notificaciones"]
+    end
+
+    subgraph OUTPUT["📊 Outputs"]
+        DASH["Dashboards"]
+        TOPO["Topology&lt;br/&gt;Map"]
+        TRACE["Distributed&lt;br/&gt;Traces"]
+        ROOT["Root Cause&lt;br/&gt;Analysis"]
+    end
+
+    SOURCES --&gt; OBSERVE
+    OBSERVE --&gt; OUTPUT
+
+    style SOURCES fill:#e0f7fa,stroke:#009d9a
+    style OBSERVE fill:#e3f2fd,stroke:#0f62fe
+    style OUTPUT fill:#e8f5e9,stroke:#198038</code></pre>
+<hr>
+<h2 id="1-vista-general-de-concert-observe">1. Vista General de Concert Observe<a class="headerlink" href="#1-vista-general-de-concert-observe" title="Permanent link">¶</a></h2>
+<h3 id="11-acceder-a-concert-observe">1.1 Acceder a Concert Observe<a class="headerlink" href="#11-acceder-a-concert-observe" title="Permanent link">¶</a></h3>
+<p>En la <strong>barra de navegación superior</strong>, haz clic en <strong>"Observe"</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-observe-overview.png" data-desc-position="bottom"><img alt="Vista principal Concert Observe" src="../assets/images/lab3-observe-overview.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 1 — Dashboard principal de Concert Observe con métricas de salud del sistema</p>
+</div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Basado en IBM Instana</p>
+<p>Concert Observe incorpora la tecnología de <strong>IBM Instana</strong> para APM full-stack, 
+con detección automática de aplicaciones y agentes zero-config. Si ya usas Instana 
+en tu organización, Concert Observe es la evolución natural hacia la plataforma unificada.</p>
+</div>
+<h3 id="12-metricas-principales-del-dashboard">1.2 Métricas Principales del Dashboard<a class="headerlink" href="#12-metricas-principales-del-dashboard" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Golden Signals</strong></td>
+<td>Latencia, tráfico, errores y saturación</td>
+</tr>
+<tr>
+<td><strong>SLO Compliance</strong></td>
+<td>% de cumplimiento de Service Level Objectives</td>
+</tr>
+<tr>
+<td><strong>Active Incidents</strong></td>
+<td>Incidentes en curso que afectan al rendimiento</td>
+</tr>
+<tr>
+<td><strong>Change Events</strong></td>
+<td>Despliegues y cambios recientes correlacionados con métricas</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-application-performance-monitoring-apm">2. Application Performance Monitoring (APM)<a class="headerlink" href="#2-application-performance-monitoring-apm" title="Permanent link">¶</a></h2>
+<h3 id="21-vista-de-aplicaciones">2.1 Vista de Aplicaciones<a class="headerlink" href="#21-vista-de-aplicaciones" title="Permanent link">¶</a></h3>
+<p>Navega a <strong>Observe → Applications</strong> para ver todas las aplicaciones monitorizadas.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-apm-apps.png" data-desc-position="bottom"><img alt="APM - Lista de aplicaciones" src="../assets/images/lab3-apm-apps.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 2 — Lista de aplicaciones monitorizadas con Golden Signals</p>
+</div>
+</div>
+<p>Cada aplicación muestra sus <strong>Golden Signals</strong> en tiempo real:</p>
+<ul>
+<li><strong>📈 Throughput</strong>: Llamadas/peticiones por segundo</li>
+<li><strong>⏱️ Latency</strong>: Tiempo de respuesta (P50, P95, P99)</li>
+<li><strong>❌ Error Rate</strong>: Porcentaje de errores</li>
+<li><strong>🔥 Saturation</strong>: Uso de recursos</li>
+</ul>
+<h3 id="22-explorar-una-aplicacion-robotshop">2.2 Explorar una Aplicación — RobotShop<a class="headerlink" href="#22-explorar-una-aplicacion-robotshop" title="Permanent link">¶</a></h3>
+<ol>
+<li>Haz clic sobre la aplicación <strong>"RobotShop"</strong> (o la disponible en tu entorno)</li>
+<li>Se abrirá la vista detallada de la aplicación</li>
+</ol>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-robotshop-detail.png" data-desc-position="bottom"><img alt="Detalle APM de RobotShop" src="../assets/images/lab3-robotshop-detail.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 3 — Vista detallada de APM para la aplicación RobotShop con métricas y llamadas</p>
+</div>
+</div>
+<p><strong>La vista de detalle de aplicación incluye:</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><input id="__tabbed_1_4" name="__tabbed_1" type="radio"><input id="__tabbed_1_5" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Overview</label><label for="__tabbed_1_2">Services</label><label for="__tabbed_1_3">Traces</label><label for="__tabbed_1_4">Dependencies</label><label for="__tabbed_1_5">Infrastructure</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li>Resumen de Golden Signals (últimas 1h, 6h, 24h)</li>
+<li>Número de instancias activas</li>
+<li>SLO compliance actual</li>
+<li>Últimos eventos/incidentes</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Lista de todos los microservicios de la aplicación</li>
+<li>Estado de salud por servicio</li>
+<li>Métricas individuales de cada servicio</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Trazas distribuidas entre servicios</li>
+<li>Trazas lentas (&gt;P95 latency)</li>
+<li>Trazas con errores</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Mapa de dependencias del servicio</li>
+<li>Llamadas a bases de datos</li>
+<li>Llamadas a APIs externas</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Hosts/contenedores donde corre la app</li>
+<li>Uso de CPU y memoria por instancia</li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+<h2 id="3-mapa-de-dependencias-topology">3. Mapa de Dependencias (Topology)<a class="headerlink" href="#3-mapa-de-dependencias-topology" title="Permanent link">¶</a></h2>
+<h3 id="31-acceder-al-topology-map">3.1 Acceder al Topology Map<a class="headerlink" href="#31-acceder-al-topology-map" title="Permanent link">¶</a></h3>
+<p>Dentro de la aplicación, haz clic en <strong>"Dependencies"</strong> o <strong>"Topology"</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-topology.png" data-desc-position="bottom"><img alt="Mapa de dependencias - Topology" src="../assets/images/lab3-topology.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 4 — Mapa de dependencias en tiempo real mostrando llamadas entre microservicios</p>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Navegación en el Topology Map</p>
+<ul>
+<li><strong>Scroll</strong> para hacer zoom in/out</li>
+<li><strong>Drag</strong> para mover el mapa</li>
+<li><strong>Click</strong> en un nodo para ver sus métricas</li>
+<li><strong>Hover</strong> sobre una arista para ver el volumen de llamadas</li>
+</ul>
+</div>
+<h3 id="32-interpretar-el-mapa">3.2 Interpretar el Mapa<a class="headerlink" href="#32-interpretar-el-mapa" title="Permanent link">¶</a></h3>
+<p>Cada elemento del mapa representa:</p>
+<table>
+<thead>
+<tr>
+<th>Icono</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔵 Nodo azul</td>
+<td>Microservicio/aplicación</td>
+</tr>
+<tr>
+<td>🟢 Línea verde</td>
+<td>Conexión saludable (latencia normal)</td>
+</tr>
+<tr>
+<td>🟠 Línea naranja</td>
+<td>Conexión degradada (latencia alta)</td>
+</tr>
+<tr>
+<td>🔴 Línea roja</td>
+<td>Conexión con errores</td>
+</tr>
+<tr>
+<td>🗄️ Cilindro</td>
+<td>Base de datos</td>
+</tr>
+<tr>
+<td>☁️ Nube</td>
+<td>Servicio externo/cloud</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-analisis-de-dependencias-de-robotshop">3.3 Análisis de Dependencias de RobotShop<a class="headerlink" href="#33-analisis-de-dependencias-de-robotshop" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+    USER["👤 Usuario"] --&gt; INGRESS["🔀 Nginx&lt;br/&gt;Ingress"]
+    INGRESS --&gt; FE["🖥️ Frontend&lt;br/&gt;(Node.js)"]
+    FE --&gt; CATALOGUE["📚 Catalogue&lt;br/&gt;(Go)"]
+    FE --&gt; CART["🛒 Cart&lt;br/&gt;(Redis)"]
+    FE --&gt; USER_SVC["👤 User Service&lt;br/&gt;(Node.js)"]
+    FE --&gt; PAYMENT["💳 Payment&lt;br/&gt;(Node.js)"]
+    FE --&gt; SHIPPING["🚚 Shipping&lt;br/&gt;(Java)"]
+    FE --&gt; RATINGS["⭐ Ratings&lt;br/&gt;(PHP)"]
+
+    CATALOGUE --&gt; MONGO[("🗄️ MongoDB")]
+    USER_SVC --&gt; MONGO
+    PAYMENT --&gt; RABBITMQ["📨 RabbitMQ"]
+    SHIPPING --&gt; MYSQL[("🗄️ MySQL")]
+    RATINGS --&gt; MYSQL
+
+    style USER fill:#e3f2fd,stroke:#0f62fe
+    style INGRESS fill:#f3e5f5,stroke:#8a3ffc
+    style FE fill:#e8f5e9,stroke:#198038</code></pre>
+<hr>
+<h2 id="4-trazas-distribuidas">4. Trazas Distribuidas<a class="headerlink" href="#4-trazas-distribuidas" title="Permanent link">¶</a></h2>
+<h3 id="41-acceder-a-distributed-tracing">4.1 Acceder a Distributed Tracing<a class="headerlink" href="#41-acceder-a-distributed-tracing" title="Permanent link">¶</a></h3>
+<p>En la aplicación, haz clic en <strong>"Traces"</strong> o navega a <strong>Observe → Traces</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-traces.png" data-desc-position="bottom"><img alt="Distributed Traces en Concert Observe" src="../assets/images/lab3-traces.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 5 — Vista de trazas distribuidas mostrando el flujo de una petición a través de los servicios</p>
+</div>
+</div>
+<h3 id="42-filtros-de-trazas">4.2 Filtros de Trazas<a class="headerlink" href="#42-filtros-de-trazas" title="Permanent link">¶</a></h3>
+<p>Usa los filtros disponibles para encontrar trazas específicas:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Filtros disponibles:
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Application: [RobotShop ▼]
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Service: [All Services ▼]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Status: [All ▼] [Success] [Error] [Slow]
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── Duration: [Min: ___ms] [Max: ___ms]
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── Time Range: [Last 1h ▼]
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└── Tag: [key=value]
+</span></code></pre></div>
+<h3 id="43-analizar-una-traza">4.3 Analizar una Traza<a class="headerlink" href="#43-analizar-una-traza" title="Permanent link">¶</a></h3>
+<ol>
+<li>En la lista de trazas, <strong>filtra por "Errors"</strong> para ver trazas con errores</li>
+<li>Haz clic en una traza para ver su detalle</li>
+</ol>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-trace-detail.png" data-desc-position="bottom"><img alt="Detalle de traza distribuida" src="../assets/images/lab3-trace-detail.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 6 — Detalle de una traza distribuida mostrando spans, latencias y errores por servicio</p>
+</div>
+</div>
+<p><strong>El detalle de traza muestra:</strong></p>
+<ul>
+<li><strong>Waterfall view</strong>: Cascada de spans con tiempos exactos</li>
+<li><strong>Service breakdown</strong>: Cuánto tiempo gastó cada servicio</li>
+<li><strong>Error details</strong>: Stack trace completo del error</li>
+<li><strong>Tags y metadata</strong>: Parámetros HTTP, SQL queries, etc.</li>
+</ul>
+<hr>
+<h2 id="5-observabilidad-de-infraestructura">5. Observabilidad de Infraestructura<a class="headerlink" href="#5-observabilidad-de-infraestructura" title="Permanent link">¶</a></h2>
+<h3 id="51-acceder-a-infrastructure">5.1 Acceder a Infrastructure<a class="headerlink" href="#51-acceder-a-infrastructure" title="Permanent link">¶</a></h3>
+<p>Navega a <strong>Observe → Infrastructure</strong> o <strong>Observe → Hosts</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-infrastructure.png" data-desc-position="bottom"><img alt="Infrastructure Monitoring en Concert" src="../assets/images/lab3-infrastructure.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 7 — Vista de infraestructura mostrando hosts, contenedores y clusters de Kubernetes</p>
+</div>
+</div>
+<h3 id="52-vista-de-kubernetes">5.2 Vista de Kubernetes<a class="headerlink" href="#52-vista-de-kubernetes" title="Permanent link">¶</a></h3>
+<p>Si el entorno usa Kubernetes, Concert Observe muestra:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Kubernetes Cluster: production-cluster
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── 📁 Namespace: robotshop
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── 📦 Deployment: frontend (3/3 pods running)
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── 📦 Deployment: catalogue (2/2 pods running)
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── 📦 Deployment: payment (2/2 pods running) ⚠️ CPU: 85%
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   └── 📦 StatefulSet: mongodb (1/1 running)
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>├── 📁 Namespace: monitoring
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   └── 📦 Deployment: instana-agent (5/5 running)
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>└── 📁 Namespace: default
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    └── (sin workloads de usuario)
+</span></code></pre></div>
+<h3 id="53-metricas-de-host">5.3 Métricas de Host<a class="headerlink" href="#53-metricas-de-host" title="Permanent link">¶</a></h3>
+<p>Para cada host/nodo, Concert muestra:</p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Umbral Normal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CPU Usage</strong></td>
+<td>&lt; 70%</td>
+</tr>
+<tr>
+<td><strong>Memory Usage</strong></td>
+<td>&lt; 80%</td>
+</tr>
+<tr>
+<td><strong>Disk I/O</strong></td>
+<td>&lt; 80%</td>
+</tr>
+<tr>
+<td><strong>Network Throughput</strong></td>
+<td>Baseline ± 20%</td>
+</tr>
+<tr>
+<td><strong>Open File Descriptors</strong></td>
+<td>&lt; 90% del límite</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="6-alertas-y-smart-alerts">6. Alertas y Smart Alerts<a class="headerlink" href="#6-alertas-y-smart-alerts" title="Permanent link">¶</a></h2>
+<h3 id="61-sistema-de-alertas-de-concert">6.1 Sistema de Alertas de Concert<a class="headerlink" href="#61-sistema-de-alertas-de-concert" title="Permanent link">¶</a></h3>
+<p>Concert utiliza <strong>Smart Alerts</strong> basadas en IA que aprenden el comportamiento normal de las aplicaciones y alertan sobre anomalías.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-alerts.png" data-desc-position="bottom"><img alt="Smart Alerts en Concert Observe" src="../assets/images/lab3-alerts.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 8 — Panel de Smart Alerts con alertas activas y configuración de umbrales</p>
+</div>
+</div>
+<h3 id="62-tipos-de-alertas">6.2 Tipos de Alertas<a class="headerlink" href="#62-tipos-de-alertas" title="Permanent link">¶</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Threshold Alerts</label><label for="__tabbed_2_2">Smart Alerts (IA)</label><label for="__tabbed_2_3">SLO Alerts</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Alertas basadas en umbrales fijos:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">Alerta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">High CPU</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">Condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu.usage &gt; 85%</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">Duration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5 minutes</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">Severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warning</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">Notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-ops-channel</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Alertas basadas en anomalías detectadas por IA:</p>
+<ul>
+<li>Concert aprende el baseline de cada métrica</li>
+<li>Detecta desviaciones estadísticas (z-score, percentiles)</li>
+<li>Se auto-ajustan con el tiempo</li>
+<li>Reducen los falsos positivos</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Alertas basadas en error budgets de SLOs:</p>
+<ul>
+<li>Error budget: 100% - SLO target</li>
+<li>Alerta cuando se consume el X% del error budget</li>
+<li>Permite priorización basada en impacto en SLO</li>
+</ul>
+</div>
+</div>
+</div>
+<h3 id="63-configurar-una-alerta">6.3 Configurar una Alerta<a class="headerlink" href="#63-configurar-una-alerta" title="Permanent link">¶</a></h3>
+<ol>
+<li>Navega a <strong>Observe → Alerts → Create Alert</strong></li>
+<li>Configura el trigger:</li>
+<li>Selecciona la aplicación/servicio</li>
+<li>Define la métrica (latency, error rate, etc.)</li>
+<li>Establece el umbral y duración</li>
+<li>Configura las notificaciones:</li>
+<li>Email, Slack, Teams, PagerDuty, etc.</li>
+<li>Haz clic en <strong>"Save"</strong></li>
+</ol>
+<hr>
+<h2 id="7-root-cause-analysis-rca">7. Root Cause Analysis (RCA)<a class="headerlink" href="#7-root-cause-analysis-rca" title="Permanent link">¶</a></h2>
+<h3 id="71-como-funciona-el-rca-en-concert">7.1 ¿Cómo funciona el RCA en Concert?<a class="headerlink" href="#71-como-funciona-el-rca-en-concert" title="Permanent link">¶</a></h3>
+<p>Concert Observe usa IA para correlacionar eventos y sugerir la causa raíz de los problemas:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant ALERT as 🔔 Alerta Detectada
+    participant AI as 🧠 Concert AI
+    participant TRACE as 📊 Trazas
+    participant INFRA as 🖥️ Infraestructura
+    participant CHANGE as 🔄 Eventos de Cambio
+    participant RCA as ✅ Root Cause
+
+    ALERT-&gt;&gt;AI: Anomalía en payment-service
+    AI-&gt;&gt;TRACE: Analizar trazas lentas
+    AI-&gt;&gt;INFRA: Verificar recursos
+    AI-&gt;&gt;CHANGE: Revisar deployments recientes
+
+    TRACE--&gt;&gt;AI: P99 latency: 8s (normal: 200ms)
+    INFRA--&gt;&gt;AI: MySQL CPU: 95%
+    CHANGE--&gt;&gt;AI: DB schema migration hace 2h
+
+    AI-&gt;&gt;RCA: Causa raíz: Migración DB sin índices</code></pre>
+<h3 id="72-ejercicio-investigar-un-problema-de-rendimiento">7.2 Ejercicio: Investigar un Problema de Rendimiento<a class="headerlink" href="#72-ejercicio-investigar-un-problema-de-rendimiento" title="Permanent link">¶</a></h3>
+<div class="admonition example">
+<p class="admonition-title">Ejercicio práctico</p>
+<p>Sigue estos pasos para investigar un problema de rendimiento simulado:</p>
+<ol>
+<li>En <strong>Observe → Applications</strong>, busca un servicio con alta latencia (indicador rojo/naranja)</li>
+<li>Abre el detalle del servicio</li>
+<li>Consulta las <strong>trazas lentas</strong> (filter: Slow)</li>
+<li>Analiza el <strong>waterfall</strong> de la traza más lenta</li>
+<li>Identifica en qué span/servicio está el cuello de botella</li>
+<li>Revisa la infraestructura de ese servicio</li>
+<li>Documenta tu análisis:</li>
+</ol>
+</div>
+<table>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Tu Respuesta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Qué servicio tiene la latencia más alta?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Cuál es el P99 de latencia?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿En qué span se concentra el tiempo?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Hay algún error en las trazas?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Qué hipótesis tienes sobre la causa raíz?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-integracion-con-concert-protect">8. Integración con Concert Protect<a class="headerlink" href="#8-integracion-con-concert-protect" title="Permanent link">¶</a></h2>
+<p>Concert Observe y Concert Protect trabajan juntos para contextualizar el riesgo:</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab3-rca-exercise.png" data-desc-position="bottom"><img alt="Integración Observe-Protect" src="../assets/images/lab3-rca-exercise.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 9 — Vista integrada mostrando vulnerabilidades en el contexto de observabilidad</p>
+</div>
+</div>
+<p>Cuando un CVE está activo en un servicio con tráfico alto, Concert:</p>
+<ol>
+<li>🔴 Eleva la prioridad del CVE (mayor riesgo real)</li>
+<li>📊 Muestra el tráfico del servicio afectado en el contexto del CVE</li>
+<li>⚡ Genera una recomendación de remediación urgente</li>
+<li>🔄 Puede activar un Workflow automatizado de remediación</li>
+</ol>
+<hr>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">¶</a></h2>
+<div class="admonition success">
+<p class="admonition-title">Lab 3 completado ✅</p>
+<p>Has explorado exitosamente el módulo Concert Observe:</p>
+<ul>
+<li>✅ Dashboard de APM con Golden Signals</li>
+<li>✅ Mapa de dependencias en tiempo real (Topology)</li>
+<li>✅ Trazas distribuidas y análisis de rendimiento</li>
+<li>✅ Observabilidad de infraestructura (hosts, K8s)</li>
+<li>✅ Smart Alerts basadas en IA</li>
+<li>✅ Root Cause Analysis</li>
+<li>✅ Integración con Concert Protect</li>
+</ul>
+<p><strong>Siguiente paso</strong>: <a href="../lab4/">Lab 4 — Concert Resilience: Gestión de Incidentes →</a></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2026 IBM Corporation
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ibm" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/ibm" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "content.tabs.link", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

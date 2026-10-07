@@ -1,0 +1,1856 @@
+<!DOCTYPE html><html lang="es" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop técnico interactivo de IBM Concert — Plataforma Agentic de ITOps">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+      
+        <link rel="prev" href="../lab1/">
+      
+      
+        <link rel="next" href="../lab3/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+          <link rel="alternate" href="../en/lab2/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../assets/images/ibm-logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 2 - Concert Protect: Vulnerabilidades - IBM Concert Workshop</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../styles/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-2-concert-protect-vulnerabilidades-cves-y-sbom" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="IBM Concert Workshop" class="md-header__button md-logo" aria-label="IBM Concert Workshop" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"></path></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IBM Concert Workshop
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 2 - Concert Protect: Vulnerabilidades
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue" aria-label="Cambiar a modo oscuro" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue" aria-label="Cambiar a modo claro" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"></path></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../en/lab2/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Compartir" aria-label="Compartir" data-clipboard="" data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="IBM Concert Workshop" class="md-nav__button md-logo" aria-label="IBM Concert Workshop" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"></path></svg>
+
+    </a>
+    IBM Concert Workshop
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 - Prerequisitos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 - Introducción a Concert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 - Concert Protect: Vulnerabilidades
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 - Concert Protect: Vulnerabilidades
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-del-laboratorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos del laboratorio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion-a-concert-protect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción a Concert Protect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-modulo-concert-protect-vista-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Módulo Concert Protect — Vista General
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Módulo Concert Protect — Vista General">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-acceder-a-concert-protect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Acceder a Concert Protect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-dashboard-de-vulnerabilidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Dashboard de Vulnerabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-gestion-de-vulnerabilidades-cve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Gestión de Vulnerabilidades CVE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Gestión de Vulnerabilidades CVE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-lista-de-cves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Lista de CVEs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-filtrar-vulnerabilidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Filtrar Vulnerabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-detalle-de-un-cve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Detalle de un CVE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-proof-of-exploitability-poe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Proof of Exploitability (PoE)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-software-bill-of-materials-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Software Bill of Materials (SBOM)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Software Bill of Materials (SBOM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-que-es-un-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 ¿Qué es un SBOM?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-ver-el-sbom-de-una-aplicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Ver el SBOM de una Aplicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-analisis-del-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Análisis del SBOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-exportar-el-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Exportar el SBOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-gestion-de-certificados-ssltls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Gestión de Certificados SSL/TLS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Gestión de Certificados SSL/TLS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-acceder-a-certificate-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Acceder a Certificate Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-vista-de-certificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Vista de Certificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-alertas-de-certificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Alertas de Certificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-compliance-y-politicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Compliance y Políticas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Compliance y Políticas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-acceder-a-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Acceder a Compliance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-politicas-predefinidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Políticas Predefinidas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-estado-de-cumplimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Estado de Cumplimiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-workflow-de-remediacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Workflow de Remediación
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Workflow de Remediación">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-asignar-una-vulnerabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Asignar una Vulnerabilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-integracion-con-sistemas-de-tickets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Integración con Sistemas de Tickets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-ejercicio-practico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Ejercicio Práctico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Ejercicio Práctico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-analizar-el-riesgo-de-una-aplicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Ejercicio: Analizar el Riesgo de una Aplicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 - Concert Observe: Observabilidad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 - Concert Resilience: Gestión de Incidentes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 - Concert Optimize: Recursos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 - Concert Workflows: Automatización
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-del-laboratorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos del laboratorio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion-a-concert-protect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción a Concert Protect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-modulo-concert-protect-vista-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Módulo Concert Protect — Vista General
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Módulo Concert Protect — Vista General">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-acceder-a-concert-protect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Acceder a Concert Protect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-dashboard-de-vulnerabilidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Dashboard de Vulnerabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-gestion-de-vulnerabilidades-cve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Gestión de Vulnerabilidades CVE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Gestión de Vulnerabilidades CVE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-lista-de-cves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Lista de CVEs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-filtrar-vulnerabilidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Filtrar Vulnerabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-detalle-de-un-cve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Detalle de un CVE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-proof-of-exploitability-poe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Proof of Exploitability (PoE)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-software-bill-of-materials-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Software Bill of Materials (SBOM)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Software Bill of Materials (SBOM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-que-es-un-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 ¿Qué es un SBOM?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-ver-el-sbom-de-una-aplicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Ver el SBOM de una Aplicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-analisis-del-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Análisis del SBOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-exportar-el-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Exportar el SBOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-gestion-de-certificados-ssltls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Gestión de Certificados SSL/TLS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Gestión de Certificados SSL/TLS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-acceder-a-certificate-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Acceder a Certificate Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-vista-de-certificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Vista de Certificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-alertas-de-certificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Alertas de Certificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-compliance-y-politicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Compliance y Políticas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Compliance y Políticas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-acceder-a-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Acceder a Compliance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-politicas-predefinidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Políticas Predefinidas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-estado-de-cumplimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Estado de Cumplimiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-workflow-de-remediacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Workflow de Remediación
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Workflow de Remediación">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-asignar-una-vulnerabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Asignar una Vulnerabilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-integracion-con-sistemas-de-tickets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Integración con Sistemas de Tickets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-ejercicio-practico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Ejercicio Práctico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Ejercicio Práctico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-analizar-el-riesgo-de-una-aplicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Ejercicio: Analizar el Riesgo de una Aplicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lab-2-concert-protect-vulnerabilidades-cves-y-sbom">Lab 2 — Concert Protect: Vulnerabilidades, CVEs y SBOM<a class="headerlink" href="#lab-2-concert-protect-vulnerabilidades-cves-y-sbom" title="Permanent link">¶</a></h1>
+<div class="lab-badge lab-badge-red">Lab 2</div>
+<div class="lab-badge lab-badge-blue">Concert Protect</div>
+<div class="lab-badge lab-badge-teal">25 min</div>
+
+<hr>
+<h2 id="objetivos-del-laboratorio">Objetivos del laboratorio<a class="headerlink" href="#objetivos-del-laboratorio" title="Permanent link">¶</a></h2>
+<p>Al finalizar este laboratorio serás capaz de:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Navegar por el módulo <strong>Concert Protect</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Visualizar y filtrar vulnerabilidades CVE por severidad</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Analizar un <strong>Software Bill of Materials (SBOM)</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Comprender la <strong>Proof of Exploitability</strong> de IBM Concert</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Gestionar el <strong>ciclo de vida de certificados SSL/TLS</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Configurar y revisar políticas de <strong>Compliance</strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled="" checked=""><span class="task-list-indicator"></span></label> Priorizar y asignar remediaciones</li>
+</ul>
+<hr>
+<h2 id="introduccion-a-concert-protect">Introducción a Concert Protect<a class="headerlink" href="#introduccion-a-concert-protect" title="Permanent link">¶</a></h2>
+<div class="concert-protect">
+
+**Concert Protect** va más allá de los scores CVSS tradicionales. Correlaciona contexto de código, aplicación, infraestructura, runtime y negocio para validar si una vulnerabilidad puede ser explotada en **tu entorno específico**.
+
+</div>
+
+<pre class="mermaid"><code>graph LR
+    CVE_FEED["🌐 Feeds CVE/NVD"] --&gt; CORRELATE
+    SBOM["📋 SBOM Analysis"] --&gt; CORRELATE
+    RUNTIME["⚡ Runtime Context"] --&gt; CORRELATE
+    INFRA["🖥️ Infrastructure"] --&gt; CORRELATE
+    BIZ["💼 Business Impact"] --&gt; CORRELATE
+
+    CORRELATE["🧠 Concert AI&lt;br/&gt;Correlation Engine"]
+
+    CORRELATE --&gt; POE["✅ Proof of&lt;br/&gt;Exploitability"]
+    CORRELATE --&gt; PRIO["📊 Risk&lt;br/&gt;Prioritization"]
+    CORRELATE --&gt; REMED["🔧 Remediation&lt;br/&gt;Actions"]
+
+    style CORRELATE fill:#fde8e8,stroke:#da1e28,stroke-width:2px
+    style POE fill:#d4edda,stroke:#198038
+    style PRIO fill:#fff3cd,stroke:#f1c21b
+    style REMED fill:#e3f2fd,stroke:#0f62fe</code></pre>
+<hr>
+<h2 id="1-modulo-concert-protect-vista-general">1. Módulo Concert Protect — Vista General<a class="headerlink" href="#1-modulo-concert-protect-vista-general" title="Permanent link">¶</a></h2>
+<h3 id="11-acceder-a-concert-protect">1.1 Acceder a Concert Protect<a class="headerlink" href="#11-acceder-a-concert-protect" title="Permanent link">¶</a></h3>
+<p>En la <strong>barra de navegación superior</strong>, haz clic en <strong>"Protect"</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-protect-overview.png" data-desc-position="bottom"><img alt="Vista principal Concert Protect" src="../assets/images/lab2-protect-overview.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 1 — Vista principal del módulo Concert Protect con resumen de vulnerabilidades</p>
+</div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Panel de Protect</p>
+<p>La vista principal de Concert Protect muestra:</p>
+<ul>
+<li><strong>Número total de CVEs</strong> categorizados por severidad</li>
+<li><strong>Aplicaciones más expuestas</strong> (ordenadas por riesgo)</li>
+<li><strong>Certificados próximos a expirar</strong> (timeline)</li>
+<li><strong>Resumen de cumplimiento de políticas</strong></li>
+</ul>
+</div>
+<h3 id="12-dashboard-de-vulnerabilidades">1.2 Dashboard de Vulnerabilidades<a class="headerlink" href="#12-dashboard-de-vulnerabilidades" title="Permanent link">¶</a></h3>
+<p>El resumen superior muestra los contadores por severidad:</p>
+<table>
+<thead>
+<tr>
+<th>Severidad</th>
+<th>Color</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 <strong>Critical</strong></td>
+<td>Rojo</td>
+<td>CVSS 9.0–10.0 — Acción inmediata</td>
+</tr>
+<tr>
+<td>🟠 <strong>High</strong></td>
+<td>Naranja</td>
+<td>CVSS 7.0–8.9 — Atención prioritaria</td>
+</tr>
+<tr>
+<td>🟡 <strong>Medium</strong></td>
+<td>Amarillo</td>
+<td>CVSS 4.0–6.9 — Planificar remediación</td>
+</tr>
+<tr>
+<td>🟢 <strong>Low</strong></td>
+<td>Verde</td>
+<td>CVSS 0.1–3.9 — Monitorizar</td>
+</tr>
+<tr>
+<td>⚫ <strong>Info</strong></td>
+<td>Gris</td>
+<td>Sin impacto conocido</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-gestion-de-vulnerabilidades-cve">2. Gestión de Vulnerabilidades CVE<a class="headerlink" href="#2-gestion-de-vulnerabilidades-cve" title="Permanent link">¶</a></h2>
+<h3 id="21-lista-de-cves">2.1 Lista de CVEs<a class="headerlink" href="#21-lista-de-cves" title="Permanent link">¶</a></h3>
+<p>Haz clic en <strong>"Vulnerabilities"</strong> en el menú de Protect.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-cve-list.png" data-desc-position="bottom"><img alt="Lista de CVEs en Concert Protect" src="../assets/images/lab2-cve-list.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 2 — Lista de vulnerabilidades CVE con filtros y ordenación por severidad</p>
+</div>
+</div>
+<h3 id="22-filtrar-vulnerabilidades">2.2 Filtrar Vulnerabilidades<a class="headerlink" href="#22-filtrar-vulnerabilidades" title="Permanent link">¶</a></h3>
+<p>Concert permite filtrar CVEs por múltiples dimensiones:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><input id="__tabbed_1_4" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Por Severidad</label><label for="__tabbed_1_2">Por Aplicación</label><label for="__tabbed_1_3">Por Estado</label><label for="__tabbed_1_4">Por Fecha</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>Haz clic en el filtro <strong>"Severity"</strong></li>
+<li>Selecciona <strong>"Critical"</strong> para ver solo vulnerabilidades críticas</li>
+<li>La lista se actualiza mostrando solo CVEs con CVSS ≥ 9.0</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>Haz clic en el filtro <strong>"Application"</strong></li>
+<li>Selecciona una aplicación del inventario (ej: "RobotShop")</li>
+<li>Ver solo los CVEs que afectan a esa aplicación</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>Usa el filtro <strong>"Status"</strong> para filtrar por:</li>
+<li><strong>Open</strong>: Sin remediar</li>
+<li><strong>In Progress</strong>: En proceso de remediación</li>
+<li><strong>Resolved</strong>: Remediados</li>
+<li><strong>Accepted Risk</strong>: Riesgo aceptado por el negocio</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>Usa el filtro <strong>"Published Date"</strong> para ver CVEs recientes</li>
+<li>Selecciona "Last 30 days" para ver vulnerabilidades nuevas</li>
+</ol>
+</div>
+</div>
+</div>
+<h3 id="23-detalle-de-un-cve">2.3 Detalle de un CVE<a class="headerlink" href="#23-detalle-de-un-cve" title="Permanent link">¶</a></h3>
+<p>Haz clic sobre cualquier CVE de la lista para ver su detalle completo.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-cve-detail.png" data-desc-position="bottom"><img alt="Detalle de CVE en Concert Protect" src="../assets/images/lab2-cve-detail.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 3 — Vista de detalle de una vulnerabilidad CVE con proof of exploitability</p>
+</div>
+</div>
+<p><strong>La vista de detalle incluye:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Información</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CVE ID</strong></td>
+<td>Identificador único (ej: CVE-2024-1234)</td>
+</tr>
+<tr>
+<td><strong>CVSS Score</strong></td>
+<td>Puntuación base de severidad</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>Descripción técnica de la vulnerabilidad</td>
+</tr>
+<tr>
+<td><strong>Affected Components</strong></td>
+<td>Paquetes/bibliotecas afectadas</td>
+</tr>
+<tr>
+<td><strong>Affected Applications</strong></td>
+<td>Qué aplicaciones tienen este CVE</td>
+</tr>
+<tr>
+<td><strong>Proof of Exploitability</strong></td>
+<td>¿Es explotable en TU entorno?</td>
+</tr>
+<tr>
+<td><strong>Remediation</strong></td>
+<td>Versión corregida disponible</td>
+</tr>
+<tr>
+<td><strong>References</strong></td>
+<td>Links a NVD, CVE.org, advisories</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24-proof-of-exploitability-poe">2.4 Proof of Exploitability (PoE)<a class="headerlink" href="#24-proof-of-exploitability-poe" title="Permanent link">¶</a></h3>
+<div class="admonition tip">
+<p class="admonition-title">Característica diferencial de Concert</p>
+<p>La <strong>Proof of Exploitability</strong> es una de las funcionalidades más potentes de Concert Protect.
+A diferencia de otras herramientas que solo muestran el score CVSS, Concert analiza:</p>
+<ul>
+<li>¿El paquete vulnerable está <strong>realmente en uso</strong> en runtime?</li>
+<li>¿Existe un <strong>vector de ataque</strong> accesible desde el exterior?</li>
+<li>¿Hay <strong>datos sensibles</strong> accesibles a través de esta vulnerabilidad?</li>
+<li>¿Cuál es el <strong>impacto en negocio</strong> si se explota?</li>
+</ul>
+</div>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-poe.png" data-desc-position="bottom"><img alt="Proof of Exploitability en Concert" src="../assets/images/lab2-poe.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 4 — Panel de Proof of Exploitability mostrando análisis de explotabilidad contextual</p>
+</div>
+</div>
+<p>Los estados posibles de PoE son:</p>
+<ul>
+<li>✅ <strong>Exploitable</strong>: Confirmado que es explotable en tu entorno</li>
+<li>⚠️ <strong>Potentially Exploitable</strong>: Requiere investigación adicional  </li>
+<li>❌ <strong>Not Exploitable</strong>: Concert ha verificado que NO es explotable en tu entorno</li>
+</ul>
+<hr>
+<h2 id="3-software-bill-of-materials-sbom">3. Software Bill of Materials (SBOM)<a class="headerlink" href="#3-software-bill-of-materials-sbom" title="Permanent link">¶</a></h2>
+<h3 id="31-que-es-un-sbom">3.1 ¿Qué es un SBOM?<a class="headerlink" href="#31-que-es-un-sbom" title="Permanent link">¶</a></h3>
+<p>Un <strong>Software Bill of Materials (SBOM)</strong> es un inventario completo de todos los componentes de software de una aplicación, incluyendo:</p>
+<ul>
+<li>Dependencias directas e indirectas</li>
+<li>Versiones exactas de cada paquete</li>
+<li>Licencias de software</li>
+<li>Vulnerabilidades conocidas por componente</li>
+</ul>
+<h3 id="32-ver-el-sbom-de-una-aplicacion">3.2 Ver el SBOM de una Aplicación<a class="headerlink" href="#32-ver-el-sbom-de-una-aplicacion" title="Permanent link">¶</a></h3>
+<ol>
+<li>Ve a <strong>Protect → Applications</strong></li>
+<li>Selecciona una aplicación (ej: "RobotShop")</li>
+<li>Haz clic en la pestaña <strong>"SBOM"</strong></li>
+</ol>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-sbom.png" data-desc-position="bottom"><img alt="SBOM en Concert Protect" src="../assets/images/lab2-sbom.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 5 — Vista del SBOM de una aplicación con árbol de dependencias</p>
+</div>
+</div>
+<h3 id="33-analisis-del-sbom">3.3 Análisis del SBOM<a class="headerlink" href="#33-analisis-del-sbom" title="Permanent link">¶</a></h3>
+<p>El SBOM en Concert muestra:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>RobotShop Application
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── 📦 frontend (Node.js 18.12.0)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   ├── express 4.18.2 ✅ sin CVE
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   ├── axios 1.4.0 ⚠️ CVE-2023-45857 (Medium)
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   └── lodash 4.17.19 🔴 CVE-2021-23337 (High)
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── 📦 payment-service (Java 17)
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── spring-boot 3.1.5 ✅ sin CVE
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   └── log4j-core 2.17.1 ✅ parchado
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>└── 📦 catalogue (Go 1.21.0)
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    ├── gin 1.9.1 ✅ sin CVE
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    └── golang.org/x/crypto 0.14.0 🟡 CVE-2023-44487 (Medium)
+</span></code></pre></div>
+<h3 id="34-exportar-el-sbom">3.4 Exportar el SBOM<a class="headerlink" href="#34-exportar-el-sbom" title="Permanent link">¶</a></h3>
+<p>Concert permite exportar el SBOM en formatos estándar:</p>
+<ol>
+<li>Haz clic en <strong>"Export"</strong> o <strong>"Download SBOM"</strong></li>
+<li>Selecciona el formato:</li>
+<li><strong>CycloneDX</strong> (formato estándar OWASP)</li>
+<li><strong>SPDX</strong> (formato estándar Linux Foundation)</li>
+<li><strong>CSV</strong> (para análisis manual)</li>
+</ol>
+<hr>
+<h2 id="4-gestion-de-certificados-ssltls">4. Gestión de Certificados SSL/TLS<a class="headerlink" href="#4-gestion-de-certificados-ssltls" title="Permanent link">¶</a></h2>
+<h3 id="41-acceder-a-certificate-management">4.1 Acceder a Certificate Management<a class="headerlink" href="#41-acceder-a-certificate-management" title="Permanent link">¶</a></h3>
+<p>En el menú Protect, selecciona <strong>"Certificates"</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-certificates.png" data-desc-position="bottom"><img alt="Gestión de certificados en Concert" src="../assets/images/lab2-certificates.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 6 — Panel de gestión de certificados SSL/TLS con timeline de expiración</p>
+</div>
+</div>
+<h3 id="42-vista-de-certificados">4.2 Vista de Certificados<a class="headerlink" href="#42-vista-de-certificados" title="Permanent link">¶</a></h3>
+<p>La vista de certificados muestra:</p>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Certificate Name</strong></td>
+<td>Nombre/dominio del certificado</td>
+</tr>
+<tr>
+<td><strong>Expiry Date</strong></td>
+<td>Fecha de expiración</td>
+</tr>
+<tr>
+<td><strong>Days Remaining</strong></td>
+<td>Días hasta la expiración</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Valid / Expiring Soon / Expired</td>
+</tr>
+<tr>
+<td><strong>Associated Apps</strong></td>
+<td>Aplicaciones que usan este certificado</td>
+</tr>
+<tr>
+<td><strong>Issuer</strong></td>
+<td>Autoridad Certificadora (CA)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-alertas-de-certificados">4.3 Alertas de Certificados<a class="headerlink" href="#43-alertas-de-certificados" title="Permanent link">¶</a></h3>
+<p>Concert genera alertas automáticas cuando un certificado está próximo a expirar:</p>
+<ul>
+<li>🔴 <strong>Expirado</strong> — Requiere acción inmediata</li>
+<li>🟠 <strong>Expira en &lt; 14 días</strong> — Urgente</li>
+<li>🟡 <strong>Expira en &lt; 30 días</strong> — Planificar renovación</li>
+<li>🟢 <strong>Expira en &gt; 30 días</strong> — Estado normal</li>
+</ul>
+<hr>
+<h2 id="5-compliance-y-politicas">5. Compliance y Políticas<a class="headerlink" href="#5-compliance-y-politicas" title="Permanent link">¶</a></h2>
+<h3 id="51-acceder-a-compliance">5.1 Acceder a Compliance<a class="headerlink" href="#51-acceder-a-compliance" title="Permanent link">¶</a></h3>
+<p>En el menú Protect, selecciona <strong>"Compliance"</strong> o <strong>"Policies"</strong>.</p>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-compliance.png" data-desc-position="bottom"><img alt="Compliance en Concert Protect" src="../assets/images/lab2-compliance.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 7 — Vista de compliance con políticas y estado de cumplimiento</p>
+</div>
+</div>
+<h3 id="52-politicas-predefinidas">5.2 Políticas Predefinidas<a class="headerlink" href="#52-politicas-predefinidas" title="Permanent link">¶</a></h3>
+<p>Concert incluye políticas de compliance preconfiguradas para marcos estándar:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Seguridad</label><label for="__tabbed_2_2">Certificados</label><label for="__tabbed_2_3">SBOM</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li><strong>CVE Critical Resolution</strong>: Los CVEs críticos deben remediarse en &lt; 7 días</li>
+<li><strong>High CVE Resolution</strong>: Los CVEs altos en &lt; 30 días</li>
+<li><strong>No Root Containers</strong>: Los contenedores no deben ejecutarse como root</li>
+<li><strong>Image Signing</strong>: Todas las imágenes deben estar firmadas</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><strong>Certificate Expiry Warning</strong>: Alertar 30 días antes de expiración</li>
+<li><strong>Certificate Min Key Length</strong>: RSA keys ≥ 2048 bits</li>
+<li><strong>TLS Version</strong>: Solo TLS 1.2 o superior</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><strong>SBOM Required</strong>: Todas las apps deben tener SBOM</li>
+<li><strong>License Compliance</strong>: Sin licencias GPL en software propietario</li>
+<li><strong>Outdated Packages</strong>: Paquetes con más de 2 versiones de atraso</li>
+</ul>
+</div>
+</div>
+</div>
+<h3 id="53-estado-de-cumplimiento">5.3 Estado de Cumplimiento<a class="headerlink" href="#53-estado-de-cumplimiento" title="Permanent link">¶</a></h3>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-compliance-detail.png" data-desc-position="bottom"><img alt="Estado de compliance detallado" src="../assets/images/lab2-compliance-detail.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 8 — Detalle del estado de cumplimiento por política y aplicación</p>
+</div>
+</div>
+<hr>
+<h2 id="6-workflow-de-remediacion">6. Workflow de Remediación<a class="headerlink" href="#6-workflow-de-remediacion" title="Permanent link">¶</a></h2>
+<h3 id="61-asignar-una-vulnerabilidad">6.1 Asignar una Vulnerabilidad<a class="headerlink" href="#61-asignar-una-vulnerabilidad" title="Permanent link">¶</a></h3>
+<ol>
+<li>Desde la lista de CVEs, selecciona un CVE crítico</li>
+<li>Haz clic en <strong>"Assign"</strong> o <strong>"Create Ticket"</strong></li>
+<li>Rellena el formulario de asignación:</li>
+<li><strong>Assignee</strong>: Equipo responsable</li>
+<li><strong>Priority</strong>: Critical/High/Medium/Low</li>
+<li><strong>Due Date</strong>: Fecha límite de remediación</li>
+<li><strong>Notes</strong>: Comentarios adicionales</li>
+</ol>
+<div class="screenshot-container">
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../assets/images/lab2-assign-cve.png" data-desc-position="bottom"><img alt="Asignación de CVE en Concert" src="../assets/images/lab2-assign-cve.png"></a></p>
+<div class="screenshot-caption">
+<p>📸 Figura 9 — Formulario de asignación y creación de ticket de remediación</p>
+</div>
+</div>
+<h3 id="62-integracion-con-sistemas-de-tickets">6.2 Integración con Sistemas de Tickets<a class="headerlink" href="#62-integracion-con-sistemas-de-tickets" title="Permanent link">¶</a></h3>
+<p>Concert puede crear automáticamente tickets en:</p>
+<ul>
+<li><strong>Jira</strong> — Crear issue en el proyecto correspondiente</li>
+<li><strong>ServiceNow</strong> — Crear incident o change request</li>
+<li><strong>GitHub Issues</strong> — Para vulnerabilidades en código</li>
+<li><strong>PagerDuty</strong> — Para alertas de alta urgencia</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Automatización de remediación</p>
+<p>En el <strong>Lab 6</strong> aprenderás a crear Workflows automatizados que creen tickets 
+automáticamente en Jira/ServiceNow cuando se detecte un CVE crítico.</p>
+</div>
+<hr>
+<h2 id="7-ejercicio-practico">7. Ejercicio Práctico<a class="headerlink" href="#7-ejercicio-practico" title="Permanent link">¶</a></h2>
+<h3 id="ejercicio-analizar-el-riesgo-de-una-aplicacion">🎯 Ejercicio: Analizar el Riesgo de una Aplicación<a class="headerlink" href="#ejercicio-analizar-el-riesgo-de-una-aplicacion" title="Permanent link">¶</a></h3>
+<p>Sigue estos pasos en el entorno de Concert:</p>
+<ol>
+<li><strong>Navega</strong> a Protect → Vulnerabilities</li>
+<li><strong>Filtra</strong> por Severity: Critical</li>
+<li><strong>Identifica</strong> el CVE con mayor puntuación CVSS</li>
+<li><strong>Abre</strong> el detalle del CVE</li>
+<li><strong>Verifica</strong> si tiene Proof of Exploitability activa</li>
+<li><strong>Identifica</strong> qué aplicaciones están afectadas</li>
+<li><strong>Consulta</strong> el SBOM de la aplicación más afectada</li>
+<li><strong>Documenta</strong> en la tabla de respuestas:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Tu Respuesta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Cuántos CVEs críticos hay en total?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Cuál es el CVE con mayor puntuación CVSS?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Está marcado como "Exploitable" (PoE)?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Qué aplicación tiene más CVEs críticos?</td>
+<td></td>
+</tr>
+<tr>
+<td>¿Cuántos certificados expiran en &lt; 30 días?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">¶</a></h2>
+<div class="admonition success">
+<p class="admonition-title">Lab 2 completado ✅</p>
+<p>Has explorado exitosamente el módulo Concert Protect:</p>
+<ul>
+<li>✅ Visualización y filtrado de CVEs por severidad</li>
+<li>✅ Análisis de la Proof of Exploitability</li>
+<li>✅ Exploración del Software Bill of Materials (SBOM)</li>
+<li>✅ Gestión del ciclo de vida de certificados SSL/TLS</li>
+<li>✅ Revisión de políticas de compliance</li>
+<li>✅ Workflow de asignación y remediación de vulnerabilidades</li>
+</ul>
+<p><strong>Siguiente paso</strong>: <a href="../lab3/">Lab 3 — Concert Observe: Observabilidad →</a></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2026 IBM Corporation
+    </div>
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ibm" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/company/ibm" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "content.tabs.link", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

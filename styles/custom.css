@@ -1,0 +1,179 @@
+/* IBM Carbon Design System - Color Tokens */
+:root {
+  --ibm-blue-60: #0043ce;
+  --ibm-blue-50: #0f62fe;
+  --ibm-blue-40: #4589ff;
+  --ibm-blue-20: #a6c8ff;
+  --ibm-gray-10: #f4f4f4;
+  --ibm-gray-20: #e0e0e0;
+  --ibm-gray-70: #525252;
+  --ibm-gray-90: #262626;
+  --ibm-gray-100: #161616;
+  --ibm-teal-50: #009d9a;
+  --ibm-green-50: #198038;
+  --ibm-green-20: #a7f0ba;
+  --ibm-red-50:  #da1e28;
+  --ibm-red-20: #ffd7d9;
+  --ibm-yellow-30: #f1c21b;
+  --ibm-purple-50: #8a3ffc;
+  --ibm-orange-40: #ff832b;
+}
+
+/* Header IBM Blue */
+.md-header {
+  background-color: var(--ibm-blue-60) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.md-header__title {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+/* Navigation */
+.md-nav__title {
+  font-weight: 600;
+  color: var(--ibm-blue-60);
+}
+
+.md-nav__link--active {
+  color: var(--ibm-blue-50) !important;
+  font-weight: 600;
+}
+
+/* Headings */
+.md-content h1 {
+  border-bottom: 3px solid var(--ibm-blue-50);
+  padding-bottom: 0.4em;
+  color: var(--ibm-gray-100);
+  font-weight: 600;
+}
+
+.md-content h2 {
+  border-left: 4px solid var(--ibm-blue-40);
+  padding-left: 0.6em;
+  color: var(--ibm-gray-90);
+  margin-top: 1.5em;
+}
+
+.md-content h3 {
+  color: var(--ibm-gray-90);
+  border-bottom: 1px solid var(--ibm-gray-20);
+  padding-bottom: 0.2em;
+}
+
+/* Tables */
+.md-typeset table:not([class]) th {
+  background-color: var(--ibm-blue-60);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) {
+  background-color: var(--ibm-gray-10);
+}
+
+.md-typeset table:not([class]) tr:hover {
+  background-color: var(--ibm-blue-20);
+}
+
+/* Admonition customization */
+.md-typeset .admonition.concert-tip,
+.md-typeset details.concert-tip {
+  border-color: var(--ibm-teal-50);
+}
+
+.md-typeset .admonition.concert-tip > .admonition-title,
+.md-typeset details.concert-tip > summary {
+  background-color: rgba(0, 157, 154, 0.1);
+  border-color: var(--ibm-teal-50);
+}
+
+/* Lab badges */
+.lab-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 4px 4px 0;
+}
+
+.lab-badge-blue { background-color: var(--ibm-blue-50); color: white; }
+.lab-badge-green { background-color: var(--ibm-green-50); color: white; }
+.lab-badge-teal { background-color: var(--ibm-teal-50); color: white; }
+.lab-badge-red { background-color: var(--ibm-red-50); color: white; }
+.lab-badge-yellow { background-color: var(--ibm-yellow-30); color: var(--ibm-gray-100); }
+.lab-badge-purple { background-color: var(--ibm-purple-50); color: white; }
+
+/* Step indicators */
+.step-counter {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.step-number {
+  background-color: var(--ibm-blue-60);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Screenshot containers */
+.screenshot-container {
+  border: 2px solid var(--ibm-gray-20);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.screenshot-caption {
+  background: var(--ibm-gray-10);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: var(--ibm-gray-70);
+  border-top: 1px solid var(--ibm-gray-20);
+  font-style: italic;
+}
+
+/* Severity indicators */
+.sev-critical { color: var(--ibm-red-50); font-weight: 700; }
+.sev-high { color: var(--ibm-orange-40); font-weight: 700; }
+.sev-medium { color: var(--ibm-yellow-30); font-weight: 700; }
+.sev-low { color: var(--ibm-green-50); font-weight: 600; }
+
+/* Concert module colors */
+.concert-protect { border-left: 4px solid var(--ibm-red-50); padding-left: 1em; }
+.concert-observe { border-left: 4px solid var(--ibm-teal-50); padding-left: 1em; }
+.concert-operate { border-left: 4px solid var(--ibm-blue-50); padding-left: 1em; }
+.concert-optimize { border-left: 4px solid var(--ibm-green-50); padding-left: 1em; }
+.concert-workflows { border-left: 4px solid var(--ibm-purple-50); padding-left: 1em; }
+
+/* Code blocks enhancement */
+.md-typeset pre > code {
+  font-size: 0.85rem;
+}
+
+/* Footer */
+.md-footer {
+  background-color: var(--ibm-gray-100);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--ibm-gray-10); }
+::-webkit-scrollbar-thumb { background: var(--ibm-blue-40); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ibm-blue-60); }
